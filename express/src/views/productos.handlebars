@@ -12,7 +12,7 @@
       <h2>{{this.name}}</h2>
       <p>Precio: ${{this.price}}</p>
       <p>Categoría: {{this.category}}</p>
-      <button>Agregar al carrito</button>
+      <button class="add-to-cart" data-product-id="{{this._id}}">Agregar al carrito</button>
     </div>
   {{/each}}
   <div>
@@ -24,5 +24,54 @@
       <a href="?page={{add currentPage 1}}&limit={{limit}}">Siguiente</a>
     {{/if}}
   </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      let cartId = localStorage.getItem('cartId');
+
+      if (!cartId) {
+        // Crear un nuevo carrito si no existe
+        try {
+          const response = await fetch('/api/carts', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          });
+          const newCart = await response.json();
+          cartId = newCart._id;
+          localStorage.setItem('cartId', cartId);
+        } catch (error) {
+          console.error('Error al crear el carrito:', error);
+          return;
+        }
+      }
+
+      const buttons = document.querySelectorAll('.add-to-cart');
+      buttons.forEach(button => {
+        button.addEventListener('click', async (event) => {
+          const productId = event.target.dataset.productId;
+          try {
+            const response = await fetch('/api/carts/add', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ cartId, productId, quantity: 1 })
+            });
+
+            if (response.ok) {
+              alert('Producto agregado al carrito');
+            } else {
+              alert('Error al agregar el producto al carrito');
+            }
+          } catch (error) {
+            console.error('Error:', error);
+            alert('Error al agregar el producto al carrito');
+          }
+        });
+      });
+    });
+  </script>
 </body>
 </html>

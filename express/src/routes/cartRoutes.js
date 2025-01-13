@@ -1,25 +1,15 @@
-import express from 'express';
-import {
-  createCart,
-  addProductToCart,
-  getCartById,
-  getAllCarts,
-  removeProduct,
-  updateCart,
-  updateProductQuantity,
-  clearCart
-} from '../controllers/cartController.js';
+import { Router } from 'express';
+import { addProductToCart, getAllCarts, createCart, getCartById, removeProduct, updateCart, updateProductQuantity, clearCart } from '../controllers/cartController.js';
 
-const routerCart = express.Router();
+const router = Router();
 
-// Rutas para gestionar el carrito
-routerCart.post('/', createCart);
-routerCart.post('/:cartId/product/:productId', addProductToCart);
-routerCart.get('/:cartId', getCartById);
-routerCart.get('/carts', getAllCarts);
-routerCart.delete('/:cid/products/:pid', removeProduct);
-routerCart.put('/:cid', updateCart);
-routerCart.put('/:cid/products/:pid', updateProductQuantity);
-routerCart.delete('/:cid', clearCart);
+router.get('/', getAllCarts);
+router.post('/', createCart);
+router.post('/add', addProductToCart);
+router.get('/:cartId', getCartById);
+router.delete('/:cid/products/:pid', removeProduct);
+router.put('/:cid', updateCart);
+router.put('/:cid/products/:pid', updateProductQuantity);
+router.delete('/:cid', clearCart);
 
-export default routerCart;
+export default router;
