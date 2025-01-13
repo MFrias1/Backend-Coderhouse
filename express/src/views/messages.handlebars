@@ -1,0 +1,23 @@
+<div>
+    <h1>Coloca tu nombre</h1>
+    <h2>Nombre: <span id="nombre"></span>
+    </h2>
+
+    {{!-- Input user --}}
+    <div>
+        <p> Escribe tu nombre: <input id="chatBox" type="text"></p>
+        <button id="closeChatBox">Cerrar ChatBox</button>
+    </div>
+
+
+    {{!-- renderizado de los mensajes --}}
+    <div>
+        <p id="messageLogs"></p>
+    </div>
+</div>
+
+{{!-- sweeralert--}}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/messages.js"></script>
