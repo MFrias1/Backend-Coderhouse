@@ -1,55 +1,46 @@
-import fs from 'fs';
-import { fileURLToPath } from 'url';
-import path from 'path';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+import Product from '../models/Product.js';
 
 class ProductManager {
-    constructor() {
-        this.path = path.join(__dirname, '..', 'models', 'product.json');
-    }
-
-    // Leer productos desde el archivo
-    readProducts = async () => {
-        const products = await fs.promises.readFile(this.path, "utf-8");
-        return JSON.parse(products);
-    }
-
-    // Escribir productos en el archivo
-    writeProduct = async (products) => {
-        await fs.promises.writeFile(this.path, JSON.stringify(products, null, 2));
-    }
 
     // Agregar un nuevo producto
     addProduct = async (product) => {
         const { title, description, code, price, stock, category } = product;
+
         if (!title || !description || !code || !price || !stock || !category) {
             throw new Error('Todos los campos son obligatorios');
         }
 
-        const products = await this.readProducts();
-        
         // Verificar si el producto ya existe por código
-        if (products.some(prod => prod.code === code)) {
+        const existingProduct = await Product.findOne({ code });
+        if (existingProduct) {
             throw new Error('El código del producto ya existe');
         }
 
-        products.push(product); 
-        await this.writeProduct(products);
+        // Crear un nuevo producto en la base de datos
+        const newProduct = new Product(product);
+        await newProduct.save();
         return 'Producto agregado';
     };
 
     // Obtener todos los productos
-    getProducts = async () => {
-        return await this.readProducts();
-    }
+    getProducts = async (filter = {}, options = {}) => {
+        try {
+            const products = await Product.find(filter, null, options); // Obtiene productos con paginación y filtros
+            return products;
+        } catch (error) {
+            throw new Error('Error al obtener productos: ' + error.message);
+        }
+    };
 
     // Obtener un producto por ID
     getProductById = async (id) => {
-        const products = await this.readProducts();
-        return products.find(prod => prod.id == id);
-    }
+        try {
+            const product = await Product.findById(id);
+            return product;
+        } catch (error) {
+            throw new Error('Producto no encontrado');
+        }
+    };
 }
 
 export default ProductManager;
