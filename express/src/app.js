@@ -3,11 +3,11 @@ import productRoutes from './routes/productRoutes.js';
 import cartRoutes from './routes/cartRoutes.js';
 import viewRoutes from './routes/views.routes.js';
 import { fileURLToPath } from 'url';
-import { dirname } from 'path'; 
+import { dirname } from 'path';
 import mongoose from 'mongoose';
 import { Server } from 'socket.io';
 import path from 'path';
-import { engine } from 'express-handlebars';  // Importa el motor correctamente
+import { engine } from 'express-handlebars';
 
 // Conexión a MongoDB
 async function startServer() {
@@ -38,12 +38,19 @@ const __dirname = dirname(__filename);
 app.engine('handlebars', engine({
   extname: '.hbs',
   defaultLayout: 'main',
-  layoutsDir: path.join(__dirname, 'views/layouts'),
+  layoutsDir: path.join(__dirname, 'views/layout'),
   runtimeOptions: {
     allowProtoPropertiesByDefault: true,
     allowProtoMethodsByDefault: true
+  },
+  helpers: {
+    gt: (a, b) => a > b,
+    lt: (a, b) => a < b,
+    add: (a, b) => a + b,
+    subtract: (a, b) => a - b
   }
-}));  // Configura Handlebars como motor de vistas
+}));
+
 app.set('view engine', 'handlebars');
 app.set('views', path.join(__dirname, 'views'));
 

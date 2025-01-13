@@ -2,7 +2,6 @@ import Cart from '../models/cart.js';
 import Product from '../models/Product.js';
 
 class CartManager {
-    
     // Crear un nuevo carrito vacío
     createCart = async () => {
         const newCart = new Cart({ products: [] });
@@ -38,6 +37,12 @@ class CartManager {
             throw new Error('Carrito no encontrado');
         }
         return cart;
+    };
+
+    // Obtener todos los carritos
+    getAllCarts = async () => {
+        const carts = await Cart.find();
+        return carts;
     };
 }
 

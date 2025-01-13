@@ -1,15 +1,25 @@
 import express from 'express';
-import { createCart, addProductToCart, getCartById } from '../controllers/cartController.js';
+import {
+  createCart,
+  addProductToCart,
+  getCartById,
+  getAllCarts,
+  removeProduct,
+  updateCart,
+  updateProductQuantity,
+  clearCart
+} from '../controllers/cartController.js';
 
 const routerCart = express.Router();
 
-// Ruta para crear un carrito
+// Rutas para gestionar el carrito
 routerCart.post('/', createCart);
-
-// Ruta para agregar un producto al carrito
 routerCart.post('/:cartId/product/:productId', addProductToCart);
-
-// Ruta para obtener un carrito por ID
 routerCart.get('/:cartId', getCartById);
+routerCart.get('/carts', getAllCarts);
+routerCart.delete('/:cid/products/:pid', removeProduct);
+routerCart.put('/:cid', updateCart);
+routerCart.put('/:cid/products/:pid', updateProductQuantity);
+routerCart.delete('/:cid', clearCart);
 
 export default routerCart;
