@@ -10,11 +10,9 @@
   <ul>
     {{#each products}}
     <li>
-      {{this.name}} - {{this.price}}
+      {{this.title}} - {{this.price}}
       <a href="/products/{{this._id}}">Ver detalles</a>
-      <form action="/api/carts/:cid/product/{{this._id}}" method="POST">
-        <button type="submit">Agregar al carrito</button>
-      </form>
+      <button class="add-to-cart" data-product-id="{{this._id}}">Agregar al carrito</button>
     </li>
     {{/each}}
   </ul>
@@ -26,5 +24,54 @@
     <a href="?page={{pagination.nextPage}}">Siguiente</a>
     {{/if}}
   </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      let cartId = localStorage.getItem('cartId');
+
+      if (!cartId) {
+        // Crear un nuevo carrito si no existe
+        try {
+          const response = await fetch('/api/carts', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          });
+          const newCart = await response.json();
+          cartId = newCart._id;
+          localStorage.setItem('cartId', cartId);
+        } catch (error) {
+          console.error('Error al crear el carrito:', error);
+          return;
+        }
+      }
+
+      const buttons = document.querySelectorAll('.add-to-cart');
+      buttons.forEach(button => {
+        button.addEventListener('click', async (event) => {
+          const productId = event.target.dataset.productId;
+          try {
+            const response = await fetch(`/api/carts/${cartId}/products/${productId}`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ quantity: 1 })
+            });
+
+            if (response.ok) {
+              alert('Producto agregado al carrito');
+            } else {
+              alert('Error al agregar el producto al carrito');
+            }
+          } catch (error) {
+            console.error('Error:', error);
+            alert('Error al agregar el producto al carrito');
+          }
+        });
+      });
+    });
+  </script>
 </body>
 </html>
