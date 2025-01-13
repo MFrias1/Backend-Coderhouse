@@ -1,7 +1,21 @@
-{{!-- productos.handlebars --}}
-<h1>Listado de Productos</h1>
-<ul>
-    {{#each products}}
-        <li>{{this.title}} - ${{this.price}} - {{this.stock}} disponibles</li>
-    {{/each}}
-</ul>
+<!-- views/productos.handlebars -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Productos</title>
+</head>
+<body>
+    <h1>Lista de Productos</h1>
+    <ul>
+        {{#each products}}
+        <li>{{this.title}} - {{this.description}} - ${{this.price}}</li>
+        {{/each}}
+    </ul>
+    <div>
+        <p>Página {{currentPage}} de {{totalPages}}</p>
+        <!-- Agrega navegación de paginación aquí si es necesario -->
+    </div>
+</body>
+</html>
