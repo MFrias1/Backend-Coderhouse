@@ -35,12 +35,20 @@ app.use(express.urlencoded({ extended: true }));
 // Configuración del motor de vistas Handlebars
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-app.engine('handlebars', engine());  // Configura Handlebars como motor de vistas
+app.engine('handlebars', engine({
+  extname: '.hbs',
+  defaultLayout: 'main',
+  layoutsDir: path.join(__dirname, 'views/layout'),
+  runtimeOptions: {
+    allowProtoPropertiesByDefault: true,
+    allowProtoMethodsByDefault: true
+  }
+}));  // Configura Handlebars como motor de vistas
 app.set('view engine', 'handlebars');
 app.set('views', path.join(__dirname, 'views'));
 
 // Rutas
-app.use('/hbs', viewRoutes);
+app.use('/handlebars', viewRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/carts', cartRoutes);
 
