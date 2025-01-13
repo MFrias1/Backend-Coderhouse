@@ -7,6 +7,7 @@ import { dirname } from 'path';
 import mongoose from 'mongoose';
 import { Server } from 'socket.io';
 import path from 'path';
+import { engine } from 'express-handlebars';  // Importa el motor correctamente
 
 // Conexión a MongoDB
 async function startServer() {
@@ -19,17 +20,24 @@ async function startServer() {
   }
 }
 
-startServer();
-
 const app = express();
 const port = process.env.PORT || 8080;
 const httpServer = app.listen(port, () => {
   console.log(`Servidor escuchando en puerto ${port}`);
 });
 
+startServer();
+
 // Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Configuración del motor de vistas Handlebars
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+app.engine('handlebars', engine());  // Configura Handlebars como motor de vistas
+app.set('view engine', 'handlebars');
+app.set('views', path.join(__dirname, 'views'));
 
 // Rutas
 app.use('/hbs', viewRoutes);
@@ -37,13 +45,7 @@ app.use('/api/products', productRoutes);
 app.use('/api/carts', cartRoutes);
 
 // Configuración de archivos estáticos
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 app.use('/', express.static(path.join(__dirname, 'public')));
-
-// Configuración de Handlebars
-app.set('view engine', 'handlebars');
-app.set('views', path.join(__dirname, 'views'));
 
 // Comunicación con el Socket
 const socketServer = new Server(httpServer);

@@ -3,7 +3,30 @@ import Product from '../models/Product.js';
 
 export const getProducts = async (req, res) => {
     try {
-        // lógica para obtener productos
+        const { limit = 10, page = 1, sort = 'asc', query = {} } = req.query;
+
+        const parsedLimit = parseInt(limit);
+        const parsedPage = parseInt(page);
+        const parsedSort = sort === 'desc' ? -1 : 1;
+
+     // paginación
+        const skip = (parsedPage - 1) * parsedLimit;
+
+        // Buscando productos con filtros 
+        const products = await Product.find(query)
+            .skip(skip)
+            .limit(parsedLimit)
+            .sort({ price: parsedSort });
+
+        const totalProducts = await Product.countDocuments(query);
+        const totalPages = Math.ceil(totalProducts / parsedLimit);
+
+        res.render('productos', {
+            products,
+            totalPages,
+            currentPage: parsedPage
+        });
+
     } catch (error) {
         console.error(error);
         res.status(500).send('Error al cargar los productos');
@@ -12,7 +35,11 @@ export const getProducts = async (req, res) => {
 
 export const getProductById = async (req, res) => {
     try {
-        // lógica para obtener un producto por ID
+        const product = await Product.findById(req.params.id);
+        if (!product) {
+            return res.status(404).send('Producto no encontrado');
+        }
+        res.render('producto', { product });
     } catch (error) {
         console.error(error);
         res.status(500).send('Error al cargar el producto');
@@ -56,7 +83,6 @@ export const remove = async (req, res) => {
     }
 };
 
-// Asegúrate de exportar todas las funciones correctamente
 export default {
     getProducts,
     getProductById,
