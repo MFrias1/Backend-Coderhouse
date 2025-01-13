@@ -5,7 +5,8 @@ const router = Router();
 
 router.get('/', getAllCarts);
 router.post('/', createCart);
-router.post('/add', addProductToCart);
+/*router.post('/add', addProductToCart);*/
+router.post('/:cartId/products', addProductToCart);
 router.get('/:cartId', getCartById);
 router.delete('/:cid/products/:pid', removeProduct);
 router.put('/:cid', updateCart);
