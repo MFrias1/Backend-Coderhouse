@@ -2,30 +2,37 @@ import express from 'express';
 
 const routerCart = express.Router();
 
+// Crear un nuevo carrito
 routerCart.post('/', (req, res) => {
-    res.render('index', {
-        /*Debe crear un nuevo carrito con la siguiente estructura:
-        id: Number/String (Autogenerado para asegurar que nunca se dupliquen los ids).
-        products: Array que contendrá objetos que representen cada producto.*/
-    })
+    // Crear carrito vacío con id autogenerado
+    res.json({
+        id: new Date().getTime(),  // Ejemplo de ID autogenerado
+        products: []
+    });
 });
 
+// Agregar un producto al carrito
 routerCart.post('/:cartid/product/:pid', (req, res) => {
-    res.render('index', {
-        /*Debe agregar el producto al arreglo products del carrito seleccionado, utilizando el siguiente formato:
-        product: Solo debe contener el ID del producto.
+    const { cartid, pid } = req.params;
+    const { quantity = 1 } = req.body;  // Definir cantidad por defecto
 
-        quantity: Debe contener el número de ejemplares de dicho producto (se agregará de uno en uno).
-
-
-        Si un producto ya existente intenta agregarse, se debe incrementar el campo quantity de dicho producto */
-    })
+    // Aquí se debería agregar la lógica para agregar productos al carrito
+    res.json({
+        cartid,
+        product: pid,
+        quantity
+    });
 });
 
+// Listar productos del carrito
 routerCart.get('/:cartid', (req, res) => {
-    res.render('index', {
-        /*.Debe listar los productos que pertenecen al carrito con el cid proporcionado*/
-    })
-});
-export default routerCart;
+    const { cartid } = req.params;
 
+    // Aquí se debería devolver la lista de productos del carrito
+    res.json({
+        cartid,
+        products: []  // Este es un ejemplo vacío
+    });
+});
+
+export default routerCart;
