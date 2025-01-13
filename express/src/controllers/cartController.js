@@ -1,4 +1,4 @@
-import CartManager from '../managers/CartManager.js';
+import CartManager from '../controllers/cartManager.js';
 
 const cartManager = new CartManager();
 
@@ -30,12 +30,12 @@ export const addProductToCart = async (req, res) => {
 // Obtener todos los productos de un carrito
 export const getCartById = async (req, res) => {
     const { cartId } = req.params;
-
     try {
-        const cart = await cartManager.getCartById(cartId);
-        res.status(200).json(cart);
+      const cart = await cartManager.getCartById(cartId);
+      res.render('cartDetail', { cart });
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Error al obtener el carrito' });
+      console.error(error);
+      res.status(500).send('Error al obtener el carrito');
     }
-};
+  };
+  

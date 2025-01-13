@@ -1,35 +1,15 @@
 import express from 'express';
+import { createCart, addProductToCart, getCartById } from '../controllers/cartController.js';
 
 const routerCart = express.Router();
 
+// Ruta para crear un carrito
+routerCart.post('/', createCart);
 
-routerCart.post('/', (req, res) => {
-    res.json({
-        id: new Date().getTime(),  
-        products: []
-    });
-});
+// Ruta para agregar un producto al carrito
+routerCart.post('/:cartId/product/:productId', addProductToCart);
 
-
-routerCart.post('/:cartid/product/:pid', (req, res) => {
-    const { cartid, pid } = req.params;
-    const { quantity = 1 } = req.body;  
-
-    res.json({
-        cartid,
-        product: pid,
-        quantity
-    });
-});
-
-
-routerCart.get('/:cartid', (req, res) => {
-    const { cartid } = req.params;
-
-    res.json({
-        cartid,
-        products: []  
-    });
-});
+// Ruta para obtener un carrito por ID
+routerCart.get('/:cartId', getCartById);
 
 export default routerCart;

@@ -33,19 +33,15 @@ export const getProducts = async (req, res) => {
     }
 };
 
-export const getProductById = async (req, res) => {
-    try {
-        const product = await Product.findById(req.params.id);
-        if (!product) {
-            return res.status(404).send('Producto no encontrado');
-        }
-        res.render('producto', { product });
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Error al cargar el producto');
-    }
-};
-
+export const getProductById = async (req, res) => { 
+    const { pid } = req.params; try { const product = await Product.findById(pid);
+         res.render('productDetail', { product }); 
+        } catch (error) { 
+            console.error(error); 
+            res.status(500).send('Error al obtener el producto'); 
+        } 
+    };
+    
 export const create = async (req, res) => {
     try {
         const product = new Product(req.body);

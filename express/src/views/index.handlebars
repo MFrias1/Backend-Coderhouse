@@ -1,37 +1,30 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de productos</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Productos</title>
 </head>
 <body>
-    <h1>Productos</h1>
-    <ul>
-        {{#each products}}
-            <li>
-                <strong>{{this.title}}</strong> - ${{this.price}}<br>
-                <em>{{this.description}}</em><br>
-                <p>Stock disponible: {{this.stock}}</p>
-                <p>Categoría: {{this.category}}</p>
-            </li>
-        {{else}}
-            <li>No hay productos disponibles.</li>
-        {{/each}}
-    </ul>
-
-    <!-- Paginación -->
-    <div>
-        {{#if prevPage}}
-            <a href="/productos?page={{prevPage}}">Página anterior</a>
-        {{/if}}
-
-        <span>Página {{currentPage}} de {{totalPages}}</span>
-
-        {{#if nextPage}}
-            <a href="/productos?page={{nextPage}}">Página siguiente</a>
-        {{/if}}
-    </div>
-
-    <!-- Scripts -->
-    <script src="/socket.io/socket.io.
+  <h1>Lista de Productos</h1>
+  <ul>
+    {{#each products}}
+    <li>
+      {{this.name}} - {{this.price}}
+      <a href="/products/{{this._id}}">Ver detalles</a>
+      <form action="/api/carts/:cid/product/{{this._id}}" method="POST">
+        <button type="submit">Agregar al carrito</button>
+      </form>
+    </li>
+    {{/each}}
+  </ul>
+  <div>
+    {{#if pagination.hasPrevPage}}
+    <a href="?page={{pagination.prevPage}}">Anterior</a>
+    {{/if}}
+    {{#if pagination.hasNextPage}}
+    <a href="?page={{pagination.nextPage}}">Siguiente</a>
+    {{/if}}
+  </div>
+</body>
+</html>

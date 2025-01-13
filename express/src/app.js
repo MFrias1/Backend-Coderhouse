@@ -38,7 +38,7 @@ const __dirname = dirname(__filename);
 app.engine('handlebars', engine({
   extname: '.hbs',
   defaultLayout: 'main',
-  layoutsDir: path.join(__dirname, 'views/layout'),
+  layoutsDir: path.join(__dirname, 'views/layouts'),
   runtimeOptions: {
     allowProtoPropertiesByDefault: true,
     allowProtoMethodsByDefault: true
@@ -48,7 +48,7 @@ app.set('view engine', 'handlebars');
 app.set('views', path.join(__dirname, 'views'));
 
 // Rutas
-app.use('/handlebars', viewRoutes);
+app.use('/hbs', viewRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/carts', cartRoutes);
 
