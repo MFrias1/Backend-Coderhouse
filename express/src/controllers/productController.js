@@ -1,50 +1,92 @@
-import ProductManager from '../controllers/ProductManager.js';
+// controllers/productController.js
+import Product from '../models/Product.js';
 
-const productManager = new ProductManager();
-
-// Controlador para obtener todos los productos
-const getProducts = async (req, res) => {
+export const getProducts = async (req, res) => {
     try {
-        const { limit = 10, page = 1, sort, query } = req.query;
+        const { limit = 10, page = 1, sort = 'asc', query = {} } = req.query;
 
-        // Configuración de opciones para la paginación y ordenamiento
-        const options = {
-            limit: parseInt(limit),
-            page: parseInt(page),
-            sort: sort ? { price: sort === 'asc' ? 1 : -1 } : null,
-        };
+        const parsedLimit = parseInt(limit);
+        const parsedPage = parseInt(page);
+        const parsedSort = sort === 'desc' ? -1 : 1;
 
-        // Filtro por categoría si se proporciona
-        const filter = query ? { category: query } : {};
+        // Calculando la cantidad de documentos que deben ser saltados (paginación)
+        const skip = (parsedPage - 1) * parsedLimit;
 
-        // Obtener los productos desde el ProductManager
-        const products = await productManager.getProducts(filter, options);
+        // Buscando productos con los filtros aplicados
+        const products = await Product.find(query)
+            .skip(skip)
+            .limit(parsedLimit)
+            .sort({ price: parsedSort });
 
-        // Responder con los productos
-        res.json({
-            status: 'success',
-            payload: products,
-            totalPages: Math.ceil(products.length / limit),
-            page,
+        const totalProducts = await Product.countDocuments(query);
+        const totalPages = Math.ceil(totalProducts / parsedLimit);
+
+        res.render('productos', {
+            products,
+            totalPages,
+            currentPage: parsedPage
         });
+
     } catch (error) {
-        res.status(500).json({ status: 'error', message: error.message });
+        console.error(error);
+        res.status(500).send('Error al cargar los productos');
     }
 };
 
-// Controlador para obtener un producto específico por ID
-const getProductById = async (req, res) => {
-    const { id } = req.params;
+export const getProductById = async (req, res) => {
     try {
-        const product = await productManager.getProductById(id);
-        if (product) {
-            res.json({ status: 'success', payload: product });
-        } else {
-            res.status(404).json({ status: 'error', message: 'Producto no encontrado' });
+        const product = await Product.findById(req.params.id);
+        if (!product) {
+            return res.status(404).send('Producto no encontrado');
         }
+        res.render('producto', { product });
     } catch (error) {
-        res.status(500).json({ status: 'error', message: error.message });
+        console.error(error);
+        res.status(500).send('Error al cargar el producto');
     }
 };
 
-export default { getProducts, getProductById };
+export const create = async (req, res) => {
+    try {
+        const product = new Product(req.body);
+        await product.save();
+        res.status(201).send('Producto creado');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error al crear el producto');
+    }
+};
+
+export const update = async (req, res) => {
+    try {
+        const product = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        if (!product) {
+            return res.status(404).send('Producto no encontrado');
+        }
+        res.send('Producto actualizado');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error al actualizar el producto');
+    }
+};
+
+export const remove = async (req, res) => {
+    try {
+        const product = await Product.findByIdAndDelete(req.params.id);
+        if (!product) {
+            return res.status(404).send('Producto no encontrado');
+        }
+        res.send('Producto eliminado');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error al eliminar el producto');
+    }
+};
+
+export default {
+    getProducts,
+    getProductById,
+    create,
+    update,
+    remove
+};

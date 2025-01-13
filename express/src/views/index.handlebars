@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,10 +9,29 @@
     <h1>Productos</h1>
     <ul>
         {{#each products}}
-            <li>{{this.title}} - ${{this.price}}</li>
+            <li>
+                <strong>{{this.title}}</strong> - ${{this.price}}<br>
+                <em>{{this.description}}</em><br>
+                <p>Stock disponible: {{this.stock}}</p>
+                <p>Categoría: {{this.category}}</p>
+            </li>
+        {{else}}
+            <li>No hay productos disponibles.</li>
         {{/each}}
     </ul>
-</body>
 
-<script src="/socket.io/socket.io.js"></script>
-<script src="../public/js/index.js"></script>
+    <!-- Paginación -->
+    <div>
+        {{#if prevPage}}
+            <a href="/productos?page={{prevPage}}">Página anterior</a>
+        {{/if}}
+
+        <span>Página {{currentPage}} de {{totalPages}}</span>
+
+        {{#if nextPage}}
+            <a href="/productos?page={{nextPage}}">Página siguiente</a>
+        {{/if}}
+    </div>
+
+    <!-- Scripts -->
+    <script src="/socket.io/socket.io.
