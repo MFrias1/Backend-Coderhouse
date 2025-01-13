@@ -30,14 +30,15 @@ export const getCartById = async (req, res) => {
 
 // Obtener todos los carritos
 export const getAllCarts = async (req, res) => {
-    try {
-      const carts = await cartManager.getAllCarts();
-      res.render('carts', { carts });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Error al obtener los carritos' });
-    }
-  };
+  try {
+    const carts = await cartManager.getAllCarts();
+    res.render('carts', { carts });  // Nombre correcto de la vista
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error al obtener los carritos' });
+  }
+};
+
   
 
 // Eliminar un producto del carrito
