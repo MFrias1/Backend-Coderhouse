@@ -58,7 +58,7 @@ app.set('view engine', 'handlebars');
 app.set('views', path.join(__dirname, 'views'));
 
 // Rutas
-app.use('/hbs', viewRoutes);
+app.use('/realtimeproducts', viewRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/carts', cartRoutes);
 

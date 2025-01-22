@@ -51,16 +51,17 @@ class CartManager {
 
     // Obtener un carrito por ID
     getCartById = async (cartId) => {
-        try {
-          const cart = await Cart.findById(cartId).populate('products.productId');
-          if (!cart) {
-            throw new Error('Carrito no encontrado');
-          }
-          return cart;
-        } catch (error) {
-          throw new Error('Carrito no encontrado');
+      try {
+        const cart = await Cart.findById(cartId).populate('products.productId');
+        if (!cart) {
+          throw new Error(`Carrito con ID ${cartId} no encontrado`);
         }
-      };
+        return cart;
+      } catch (error) {
+        console.error(`Error específico al obtener el carrito: ${error.message}`);
+        throw new Error(`Error específico al obtener el carrito: ${error.message}`);
+      }
+    };
     
     // Obtener todos los carritos
     getAllCarts = async () => {
