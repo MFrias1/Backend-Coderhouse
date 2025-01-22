@@ -8,16 +8,36 @@
 </head>
 <body>
   <h1>Detalles del Carrito</h1>
-  <ul>
-    {{#each cart.products}}
-    <li>
-      <strong>{{this.productId.title}}</strong><br>
-      Descripción: {{this.productId.description}}<br>
-      Precio: {{this.productId.price}}<br>
-      Cantidad: {{this.quantity}}<br>
-      
-    </li>
+  {{#if cart}}
+    <ul>
+      {{#each cart.products}}
+      <li>
+        <strong>{{this.productId.title}}</strong><br>
+        Descripción: {{this.productId.description}}<br>
+        Precio: {{this.productId.price}}<br>
+        Cantidad: {{this.quantity}}<br>
+        <hr>
+      </li>
+      {{/each}}
+    </ul>
+  {{else if carts}}
+    {{#each carts}}
+      <h3>Carrito ID: {{this._id}}</h3>
+      <ul>
+        {{#each this.products}}
+        <li>
+          <strong>{{this.productId.title}}</strong><br>
+          Descripción: {{this.productId.description}}<br>
+          Precio: {{this.productId.price}}<br>
+          Cantidad: {{this.quantity}}<br>
+          <hr>
+        </li>
+        {{/each}}
+      </ul>
     {{/each}}
-  </ul>
+  {{else}}
+    <p>No hay carritos disponibles.</p>
+  {{/if}}
 </body>
 </html>
+

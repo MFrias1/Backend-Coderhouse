@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -41,7 +41,7 @@
         button.addEventListener('click', async (event) => {
           const productId = event.target.dataset.productId;
           try {
-            const response = await fetch(`/api/carts/${cartId}/products`, {
+            const response = await fetch(`/api/carts/add`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ cartId, productId, quantity: 1 })

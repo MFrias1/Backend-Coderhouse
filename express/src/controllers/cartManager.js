@@ -13,7 +13,7 @@ class CartManager {
         const cart = await Cart.findById(cartId); 
         if (!cart) { 
             throw new Error('Carrito no encontrado'); } 
-        const productIndex = cart.products.findIndex(item => item.productId.toString() === productId); 
+         const productIndex = cart.products.findIndex(item => item.productId.toString() === productId); 
         if (productIndex !== -1) { cart.products[productIndex].quantity += quantity; 
         } else { 
             cart.products.push({ cartId, productId, quantity });
@@ -23,19 +23,17 @@ class CartManager {
 
     // Obtener un carrito por ID
     getCartById = async (cartId) => {
-        const cart = await Cart.findById(cartId).populate('products.productId');
-        if (!cart) {
+        try {
+          const cart = await Cart.findById(cartId).populate('products.productId');
+          if (!cart) {
             throw new Error('Carrito no encontrado');
+          }
+          return cart;
+        } catch (error) {
+          throw new Error('Carrito no encontrado');
         }
-        return cart;
-    };
-    getCartById = async (cartId) => {
-        const cart = await Cart.findById(cartId).populate('products.productId');
-        if (!cart) {
-            throw new Error('Carrito no encontrado');
-        }
-        return cart;
-    };
+      };
+    
     // Obtener todos los carritos
     getAllCarts = async () => {
         const carts = await Cart.find();

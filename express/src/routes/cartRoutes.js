@@ -5,10 +5,10 @@ import { createCart, addProductToCart, getCartById, getAllCarts, removeProduct, 
 const router = express.Router();
 
 router.get('/:cartId/products', getCartProducts);
-router.get('/', getAllCarts);
+router.get('/:cartId', getCartById);//funciona
+router.get('/', getAllCarts);//funciona
 router.post('/', createCart);
 router.post('/add', addProductToCart);
-router.get('/:cartId', getCartById);
 router.delete('/:cid/products/:pid', removeProduct);
 router.put('/:cid', updateCart);
 router.put('/:cid/products/:pid', updateProductQuantity);
