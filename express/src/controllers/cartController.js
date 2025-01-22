@@ -15,7 +15,17 @@ export const createCart = async (req, res) => {
 };
 
 // Agregar un producto al carrito
-export const addProductToCart = async (req, res) => { const { cartId, productId, quantity } = req.body; try { const updatedCart = await cartManager.addProductToCart(cartId, productId, quantity); res.status(200).json(updatedCart); } catch (error) { console.error(error); res.status(500).json({ message: 'Error al agregar el producto al carrito' }); } };
+export const addProductToCart = async (req, res) => { 
+  const { cartId, productId, quantity } = req.body; 
+  try { 
+    const updatedCart = await cartManager.addProductToCart(cartId, productId, quantity); 
+    res.status(200).json(updatedCart); 
+  } catch (error) {
+     console.error(error); res.status(500).json({ 
+      message: 'Error al agregar el producto al carrito' 
+    }); 
+  } 
+};
 
 // Obtener todos los productos de un carrito
 export const getCartById = async (req, res) => {
@@ -33,14 +43,23 @@ export const getCartById = async (req, res) => {
 export const getAllCarts = async (req, res) => {
   try {
     const carts = await cartManager.getAllCarts();
-    res.render('carts', { carts });  // Nombre correcto de la vista
+    res.render('cartDetail', { carts }); 
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Error al obtener los carritos' });
   }
+}; 
+ 
+export const getCartProducts = async (req, res) => {
+  const { cartId } = req.params;
+  try {
+    const cart = await cartManager.getCartById(cartId);
+    res.json(cart.products);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error al obtener los productos del carrito');
+  }
 };
-
-  
 
 // Eliminar un producto del carrito
 export const removeProduct = async (req, res) => {
