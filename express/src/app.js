@@ -32,9 +32,12 @@ startServer();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Configuración del motor de vistas Handlebars
+// Configuración de archivos estáticos
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Configuración del motor de vistas Handlebars
 app.engine('handlebars', engine({
   extname: '.hbs',
   defaultLayout: 'main',
@@ -58,9 +61,6 @@ app.set('views', path.join(__dirname, 'views'));
 app.use('/hbs', viewRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/carts', cartRoutes);
-
-// Configuración de archivos estáticos
-app.use('/', express.static(path.join(__dirname, 'public')));
 
 // Comunicación con el Socket
 const socketServer = new Server(httpServer);

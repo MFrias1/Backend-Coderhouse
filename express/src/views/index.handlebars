@@ -32,7 +32,7 @@
       if (!cartId) {
         // Crear un nuevo carrito si no existe
         try {
-          const response = await fetch('/api/carts', {
+          const response = await fetch('/api/carts/cart', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
@@ -52,12 +52,12 @@
         button.addEventListener('click', async (event) => {
           const productId = event.target.dataset.productId;
           try {
-            const response = await fetch(`/api/carts/${cartId}/products/${productId}`, {
+            const response = await fetch(`/api/carts/${cartId}/productos`, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json'
               },
-              body: JSON.stringify({ quantity: 1 })
+              body: JSON.stringify({ productId, quantity: 1 })
             });
 
             if (response.ok) {
