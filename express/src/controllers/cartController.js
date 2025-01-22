@@ -101,6 +101,8 @@ export const updateProductQuantity = async (req, res) => {
 };
 
 // Vaciar el carrito
+
+
 export const clearCart = async (req, res) => {
   const { cid } = req.params;
   try {
@@ -111,3 +113,4 @@ export const clearCart = async (req, res) => {
     res.status(500).json({ message: 'Error al vaciar el carrito' });
   }
 };
+

@@ -13,6 +13,20 @@ class CartManager {
         throw new Error(`Error específico al crear el carrito: ${error.message}`);
       }
     };
+    clearCart = async (cartId) => {
+      try {
+        const cart = await Cart.findById(cartId);
+        if (!cart) {
+          throw new Error(`Carrito con ID ${cartId} no encontrado`);
+        }
+        cart.products = [];
+        await cart.save();
+        return cart;
+      } catch (error) {
+        console.error(`Error específico al vaciar el carrito: ${error.message}`);
+        throw new Error(`Error específico al vaciar el carrito: ${error.message}`);
+      }
+    };
 
     // Agregar un producto al carrito
     addProductToCart = async (cartId, productId, quantity) => {
