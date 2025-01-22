@@ -4,13 +4,13 @@ import { createCart, addProductToCart, getCartById, getAllCarts, removeProduct, 
 
 const router = express.Router();
 
-router.post('/cart', createCart);
-router.post('/cart/:id/productos', addProductToCart);
-router.get('/cart/:id', getCartById);
-router.get('/carts', getAllCarts);
-router.delete('/cart/:cid/product/:pid', removeProduct);
-router.put('/cart/:cid', updateCart);
-router.put('/cart/:cid/product/:pid', updateProductQuantity);
-router.delete('/cart/:cid', clearCart);
+router.get('/', getAllCarts);
+router.post('/', createCart);
+router.post('/add', addProductToCart);
+router.get('/:cartId', getCartById);
+router.delete('/:cid/products/:pid', removeProduct);
+router.put('/:cid', updateCart);
+router.put('/:cid/products/:pid', updateProductQuantity);
+router.delete('/:cid', clearCart);
 
 export default router;
