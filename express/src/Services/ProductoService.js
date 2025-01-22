@@ -37,7 +37,7 @@ const getAllWithFilters = async ({ limit = 10, page = 1, query = {}, sort = 'asc
         };
     } catch (error) {
         console.error(error);
-        return { status: 'error', message: `Error fetching products: ${error.message}` };  // Mensaje de error más detallado
+        return { status: 'error', message: `Error fetching products: ${error.message}` };
     }
 };
 

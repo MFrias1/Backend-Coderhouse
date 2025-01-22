@@ -9,11 +9,10 @@ export const createCart = async (req, res) => {
     const newCart = await cartManager.createCart();
     res.status(201).json(newCart);
   } catch (error) {
-    console.error(error);
+    console.error(`Error al crear el carrito: ${error.message}`);
     res.status(500).json({ message: 'Error al crear el carrito' });
   }
 };
-
 
 // Agregar un producto al carrito
 export const addProductToCart = async (req, res) => { 
@@ -22,10 +21,8 @@ export const addProductToCart = async (req, res) => {
     const updatedCart = await cartManager.addProductToCart(cartId, productId, quantity); 
     res.status(200).json(updatedCart); 
   } catch (error) {
-     console.error(error); 
-     res.status(500).json({ 
-      message: 'Error al agregar el producto al carrito' 
-    }); 
+    console.error(`Error al agregar el producto al carrito: ${error.message}`);
+    res.status(500).json({ message: 'Error al agregar el producto al carrito'})
   } 
 };
 

@@ -27,6 +27,9 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
+      // Limpiar cualquier cartId anterior
+      localStorage.removeItem('cartId');
+
       let cartId = localStorage.getItem('cartId');
 
       if (!cartId) {
@@ -41,10 +44,13 @@
           const newCart = await response.json();
           cartId = newCart._id;
           localStorage.setItem('cartId', cartId);
+          console.log('Nuevo carrito creado:', cartId);
         } catch (error) {
           console.error('Error al crear el carrito:', error);
           return;
         }
+      } else {
+        console.log('Carrito existente utilizado:', cartId);
       }
 
       const buttons = document.querySelectorAll('.add-to-cart');
